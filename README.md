@@ -19,6 +19,13 @@ To manage file size and for ease of parsing, the load function uses the hex file
 
 Examples are provided that demonstrate how to load a hex file into the MachXO device.  These examples get the file from an external flash device as is available on the Adafruit "Express" boards like the [Feather M4 Express](https://www.adafruit.com/product/3857) or [Feather nRF52840 Express](https://www.adafruit.com/product/4062).  This configuration is becoming very popular since the extra storage makes it easier to implement CircuitPython.  For boards without SPI flash, an SD card can be used to store the files.  The TinyUSB libray is used so that files can be copied to the board just like a USB thumb drive.  
 
+### Example Hex Files ###
+
+Some example hex files are provided for demonstration purposes.
+
+* tiny256.hex is an example for the [TinyFPGA AX1](https://store.tinyfpga.com/products/tinyfpga-a1) that blinks the LED
+* xo3starter.hex is an example for the [MachXO3LF Starter Kit](http://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/MachXO3LFStarterKit) that applies a counter to the LEDs controlled by the switches.
+
 ## SPI Support ##
 
 It is intended to add SPI support to this library in future revisions.  Until that is fully implemented, an example sketch is provided that implements the functions locally.  
