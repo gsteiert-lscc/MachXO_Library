@@ -5,7 +5,7 @@ This implements the procedures outline in the Programming and Configuration Usag
 [MachXO3 Programming and Configuration Usage Guide](http://www.latticesemi.com/view_document?document_id=50123)
 
 ## About this Driver ##
-To access the Lattice MachXO device, you only need the standard Wire(I2C) or SPI libraries.  However, the size of the images for teh MachXO devices are larger than the integrated storage of some microcontrollers so the load function reads the data from a file using the SdFat library.  
+To access the Lattice MachXO device, you only need the standard Wire(I2C) or SPI libraries.  However, the size of the images for the MachXO devices are larger than the integrated storage of some microcontrollers so the load function reads the data from a file using the SdFat library.  
 
 To use this libray, copy this directory and all the contents into the "libraries" directory where Arduino keeps all your installed libraries (typically ~/Documents/Aduino/libraries). 
 
