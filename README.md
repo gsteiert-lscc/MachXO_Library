@@ -21,10 +21,10 @@ Examples are provided that demonstrate how to load a hex file into the MachXO de
 
 ### Example Hex Files ###
 
-Some example hex files are provided for demonstration purposes.
+Some example hex files are provided in the examples/hex_files folder for demonstration purposes.
 
 * tiny256.hex is an example for the [TinyFPGA AX1](https://store.tinyfpga.com/products/tinyfpga-a1) that blinks the LED
-* xo3starter.hex is an example for the [MachXO3LF Starter Kit](http://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/MachXO3LFStarterKit) that applies a counter to the LEDs controlled by the switches.
+* xo3starter.hex is an example for the [MachXO3LF Starter Kit](http://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/MachXO3LFStarterKit) that applies a counter to the LEDs controlled by the switches
 
 ## SPI Support ##
 
