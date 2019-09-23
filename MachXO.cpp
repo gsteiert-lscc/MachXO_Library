@@ -47,6 +47,22 @@ MachXO::MachXO(int8_t cspin, int8_t mosipin, int8_t misopin, int8_t sckpin)
     : _cs(cspin), _mosi(mosipin), _miso(misopin), _sck(sckpin) {
 }
 
+void MachXO::begin(){
+  if (_cs == -1){       // I2C
+    _wire->begin();
+  } else {              // SPI
+    digitalWrite(_cs, HIGH);
+    pinMode(_cs, OUTPUT);
+    if (_sck == -1) {   // hardware SPI
+      _spi->begin();
+    } else {            // software SPI
+      pinMode(_sck, OUTPUT);
+      pinMode(_mosi, OUTPUT);
+      pinMode(_miso, INPUT);
+    }
+  }
+}
+
 uint8_t MachXO::spixfer(uint8_t x) {
   if (_sck == -1)
     return _spi->transfer(x);

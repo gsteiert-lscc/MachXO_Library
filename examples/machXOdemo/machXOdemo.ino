@@ -66,7 +66,9 @@ FatFile file;
 Adafruit_USBD_MSC usb_msc;
 
 // Lattice MachXO Programmer
-MachXO machXO;
+MachXO machXO;  // I2C default address 0b1000000
+// MachXO machXO(5) // Hardware SPI, CS pin=5
+// MachXO machXO(5, MOSI, MISO, SCK) // Software SPI, CS pin=5
 
 // Additional Programming I/O
 #define XO_PRGMN (9)
@@ -90,6 +92,8 @@ void setup()
   pinMode(XO_INITN, INPUT_PULLUP);
   digitalWrite(XO_PRGMN, LOW);
   digitalWrite(XO_INITN, LOW);
+
+  machXO.begin();
 
   flash.begin();
 
