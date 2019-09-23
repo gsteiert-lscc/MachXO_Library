@@ -56,6 +56,7 @@ public:
     MachXO(int8_t cspin, SPIClass *theSPI = &SPI);
     MachXO(int8_t cspin, int8_t mosipin, int8_t misopin, int8_t sckpin);
     void begin();
+    uint8_t spixfer(uint8_t x);
     uint32_t readDeviceID(uint8_t *ibuf);
     uint32_t readUserCode(uint8_t *ibuf);
     uint32_t readStatus(uint8_t *ibuf);

@@ -104,7 +104,7 @@ uint32_t MachXO::cmdxfer(uint8_t *wbuf, int wcnt, uint8_t *rbuf, int rcnt) {
             Wire.endTransmission(true);
         }
     } else {
-      if (_sck == -1) _spi->beginTransactioin(SPISettings(MACHXO_SPI_SPEED, MSBFIRST, SPIMODE0));
+      if (_sck == -1) _spi->beginTransaction(SPISettings(MACHXO_SPI_SPEED, MSBFIRST, SPI_MODE0));
       digitalWrite(_cs, LOW);
       for (int i = 0; i < wcnt; i++)
       {
@@ -115,7 +115,7 @@ uint32_t MachXO::cmdxfer(uint8_t *wbuf, int wcnt, uint8_t *rbuf, int rcnt) {
         rbuf[i]=spixfer(0);
       }
       digitalWrite(_cs, HIGH);
-      if (_sck == -1) _spi->endTransactioin();
+      if (_sck == -1) _spi->endTransaction();
     }
     return 0;
 }
@@ -151,19 +151,21 @@ uint32_t MachXO::readOTPFuses(uint8_t *ibuf) {
 }
 
 uint32_t MachXO::readFlash(uint8_t *ibuf) {
+  uint8_t obuf[4] = {0x73, 0x10, 0x00, 0x00};
   if (_cs == -1) { // Operands are different for I2C/SPI
-    uint8_t obuf[4] = {0x73, 0x00, 0x00, 0x00};
+    obuf[1] = 0x00;
   } else {
-    uint8_t obuf[4] = {0x73, 0x10, 0x00, 0x00};
+    obuf[1] = 0x10;
   }
   return cmdxfer(obuf, 4, ibuf, 16);
 }
 
 uint32_t MachXO::readUFM(uint8_t *ibuf) {
+  uint8_t obuf[4] = {0xCA, 0x10, 0x00, 0x00};
   if (_cs == -1) { // Operands are different for I2C/SPI
-    uint8_t obuf[4] = {0xCA, 0x00, 0x00, 0x00};
+    obuf[1] = 0x00;
   } else {
-    uint8_t obuf[4] = {0xCA, 0x10, 0x00, 0x00};
+    obuf[1] = 0x10;
   }
   return cmdxfer(obuf, 4, ibuf, 16);
 }
