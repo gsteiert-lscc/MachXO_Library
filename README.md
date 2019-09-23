@@ -25,7 +25,3 @@ Some example hex files are provided in the examples/hex_files folder for demonst
 
 * tiny256.hex is an example for the [TinyFPGA AX1](https://store.tinyfpga.com/products/tinyfpga-a1) that blinks the LED
 * xo3starter.hex is an example for the [MachXO3LF Starter Kit](http://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/MachXO3LFStarterKit) that applies a counter to the LEDs controlled by the switches
-
-## SPI Support ##
-
-It is intended to add SPI support to this library in future revisions.  Until that is fully implemented, an example sketch is provided that implements the functions locally.  
