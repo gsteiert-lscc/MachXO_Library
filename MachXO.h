@@ -35,6 +35,7 @@
 #include <SPI.h>
 
 #define MACHXO_I2C_ADDR       0x40
+#define MACHXO_SPI_SPEED      500000
 
 //  Forward declarations of Wire and SPI for board/variant combinations that don't have a default 'Wire' or 'SPI' 
 extern TwoWire Wire;  /**< Forward declaration of Wire object */

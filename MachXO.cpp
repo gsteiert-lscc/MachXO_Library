@@ -47,6 +47,22 @@ MachXO::MachXO(int8_t cspin, int8_t mosipin, int8_t misopin, int8_t sckpin)
     : _cs(cspin), _mosi(mosipin), _miso(misopin), _sck(sckpin) {
 }
 
+uint8_t MachXO::spixfer(uint8_t x) {
+  if (_sck == -1)
+    return _spi->transfer(x);
+  // software SPI
+  uint8_t reply = 0;
+  for (int i = 7; i >= 0; i--) {
+    reply <<= 1;
+    digitalWrite(_sck, LOW);
+    digitalWrite(_mosi, x & (1 << i));
+    digitalWrite(_sck, HIGH);
+    if (digitalRead(_miso))
+      reply |= 1;
+  }
+  return reply;
+}
+
 uint32_t MachXO::cmdxfer(uint8_t *wbuf, int wcnt, uint8_t *rbuf, int rcnt) {
     if (_cs == -1)
     {
@@ -71,6 +87,19 @@ uint32_t MachXO::cmdxfer(uint8_t *wbuf, int wcnt, uint8_t *rbuf, int rcnt) {
         {
             Wire.endTransmission(true);
         }
+    } else {
+      if (_sck == -1) _spi->beginTransactioin(SPISettings(MACHXO_SPI_SPEED, MSBFIRST, SPIMODE0));
+      digitalWrite(_cs, LOW);
+      for (int i = 0; i < wcnt; i++)
+      {
+        spixfer(wbuf[i]);
+      }
+      for (int i = 0; i < rcnt; i++)
+      {
+        rbuf[i]=spixfer(0);
+      }
+      digitalWrite(_cs, HIGH);
+      if (_sck == -1) _spi->endTransactioin();
     }
     return 0;
 }
@@ -106,12 +135,20 @@ uint32_t MachXO::readOTPFuses(uint8_t *ibuf) {
 }
 
 uint32_t MachXO::readFlash(uint8_t *ibuf) {
-  uint8_t obuf[4] = {0x73, 0x00, 0x00, 0x00};
+  if (_cs == -1) { // Operands are different for I2C/SPI
+    uint8_t obuf[4] = {0x73, 0x00, 0x00, 0x00};
+  } else {
+    uint8_t obuf[4] = {0x73, 0x10, 0x00, 0x00};
+  }
   return cmdxfer(obuf, 4, ibuf, 16);
 }
 
 uint32_t MachXO::readUFM(uint8_t *ibuf) {
-  uint8_t obuf[4] = {0xCA, 0x00, 0x00, 0x00};
+  if (_cs == -1) { // Operands are different for I2C/SPI
+    uint8_t obuf[4] = {0xCA, 0x00, 0x00, 0x00};
+  } else {
+    uint8_t obuf[4] = {0xCA, 0x10, 0x00, 0x00};
+  }
   return cmdxfer(obuf, 4, ibuf, 16);
 }
 
@@ -126,13 +163,21 @@ uint32_t MachXO::erase(uint32_t flags) {
 }
 
 uint32_t MachXO::enableConfigTransparent() {
-  uint8_t obuf[3] = {0x74, 0x08, 0x00};
-  return cmdxfer(obuf, 3, NULL, 0);
+  uint8_t obuf[4] = {0x74, 0x08, 0x00, 0x00};
+  if (_cs == -1) { // Only send the command + first 2 operands for I2C 
+    return cmdxfer(obuf, 3, NULL, 0);
+  } else {
+    return cmdxfer(obuf, 4, NULL, 0);
+  }
 }
 
 uint32_t MachXO::enableConfigOffline() {
-  uint8_t obuf[3] = {0xC6, 0x08, 0x00};
-  return cmdxfer(obuf, 3, NULL, 0);
+  uint8_t obuf[4] = {0xC6, 0x08, 0x00, 0x00};
+  if (_cs == -1) { // Only send the command + first 2 operands for I2C
+    return cmdxfer(obuf, 3, NULL, 0);
+  } else {
+    return cmdxfer(obuf, 4, NULL, 0);
+  }
 }
 
 uint32_t MachXO::isBusy() {
