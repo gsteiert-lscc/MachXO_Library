@@ -37,6 +37,8 @@
 #define MACHXO_I2C_ADDR       0x40
 #define MACHXO_SPI_SPEED      500000
 
+#define DBG_MSG               if (_verbose) Serial
+
 //  Forward declarations of Wire and SPI for board/variant combinations that don't have a default 'Wire' or 'SPI' 
 extern TwoWire Wire;  /**< Forward declaration of Wire object */
 extern SPIClass SPI;  /**< Forward declaration of SPI object */
@@ -55,8 +57,7 @@ public:
     MachXO(TwoWire *theWire = &Wire, uint8_t theAddr = MACHXO_I2C_ADDR);
     MachXO(int8_t cspin, SPIClass *theSPI = &SPI);
     MachXO(int8_t cspin, int8_t mosipin, int8_t misopin, int8_t sckpin);
-    void begin();
-    uint8_t spixfer(uint8_t x);
+    void begin(uint8_t verbose = 0);
     uint32_t readDeviceID(uint8_t *ibuf);
     uint32_t readUserCode(uint8_t *ibuf);
     uint32_t readStatus(uint8_t *ibuf);
@@ -85,7 +86,9 @@ public:
 private:
     TwoWire *_wire; /**< Wire object */
     SPIClass *_spi; /**< SPI object */
+    uint8_t _verbose;
     uint8_t _i2caddr;
+    uint8_t spixfer(uint8_t x);
     uint32_t cmdxfer(uint8_t *wbuf, int wcnt, uint8_t *rbuf, int rcnt);
     int8_t _cs, _mosi, _miso, _sck;
 };

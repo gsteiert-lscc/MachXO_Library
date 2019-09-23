@@ -47,7 +47,8 @@ MachXO::MachXO(int8_t cspin, int8_t mosipin, int8_t misopin, int8_t sckpin)
     : _cs(cspin), _mosi(mosipin), _miso(misopin), _sck(sckpin) {
 }
 
-void MachXO::begin(){
+void MachXO::begin(uint8_t verbose){
+  _verbose = verbose;
   if (_cs == -1){       // I2C
     _wire->begin();
   } else {              // SPI
@@ -291,7 +292,7 @@ uint32_t MachXO::loadHex(FatFile hexFile) {
         byteCnt = 0;
       } else {
         if (byteCnt > 15) {
-          Serial.println("too many hex digits");
+          DBG_MSG.println("too many hex digits");
         } else {
           if (hexFile.available()) {
             hexByteStr[0] = nextChr;
@@ -303,18 +304,18 @@ uint32_t MachXO::loadHex(FatFile hexFile) {
               pageCnt += 1;
             }
           } else {
-            Serial.println("uneven number of hex digits");
+            DBG_MSG.println("uneven number of hex digits");
           }
         }
       }
     }
-    Serial.print(pageCnt);
-    Serial.println(" pages written");
+    DBG_MSG.print(pageCnt);
+    DBG_MSG.println(" pages written");
     if (byteCnt == 16) {
       byteCnt = 0;
     }
-    Serial.print(byteCnt);
-    Serial.println(" bytes left over");
+    DBG_MSG.print(byteCnt);
+    DBG_MSG.println(" bytes left over");
     hexFile.close();
   return (byteCnt);
 }

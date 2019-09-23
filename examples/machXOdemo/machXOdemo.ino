@@ -112,8 +112,9 @@ void setup()
   // Init file system on the flash
   fatfs.begin(&flash);
 
-  machXO.begin();
-
+//  machXO.begin(); // no debug messages
+  machXO.begin(1); // show debug messages
+  
   Serial.begin(115200);
   while ( !Serial ) delay(10);   // wait for native usb
 
