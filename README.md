@@ -19,6 +19,14 @@ To manage file size and for ease of parsing, the load function uses the hex file
 
 Examples are provided that demonstrate how to load a hex file into the MachXO device.  These examples get the file from an external flash device as is available on the Adafruit "Express" boards like the [Feather M4 Express](https://www.adafruit.com/product/3857) or [Feather nRF52840 Express](https://www.adafruit.com/product/4062).  This configuration is becoming very popular since the extra storage makes it easier to implement CircuitPython.  For boards without SPI flash, an SD card can be used to store the files.  The TinyUSB libray is used so that files can be copied to the board just like a USB thumb drive.  
 
+### machXOdemo ###
+
+This demonstration can be used with I2C or SPI.  Select the interface you wish to use by which of lines 69-71 is not commented out.  A simple terminal interface is provided to test the different commands.
+
+### i2c_term ###
+
+This is similar to machXOdemo, except that it includes generic I2C commands in the terminal interface so that it can also be used for interfacing with your own user code running on the FPGA, or with other I2C devices on the same bus.
+
 ### Example Hex Files ###
 
 Some example hex files are provided in the examples/hex_files folder for demonstration purposes.

@@ -104,6 +104,9 @@ uint32_t MachXO::cmdxfer(uint8_t *wbuf, int wcnt, uint8_t *rbuf, int rcnt) {
             Wire.endTransmission(true);
         }
     } else {
+      // Note when reading the flash, a 240ns or 360ns minimum delay is required after 
+      // the command before the end of the first operand byte.  This is only an issue if
+      // the SPI clock is faster than 20MHz
       if (_sck == -1) _spi->beginTransaction(SPISettings(MACHXO_SPI_SPEED, MSBFIRST, SPI_MODE0));
       digitalWrite(_cs, LOW);
       for (int i = 0; i < wcnt; i++)
@@ -250,7 +253,9 @@ uint32_t MachXO::setUFMAddress(uint32_t page) {
 }
 
 uint32_t MachXO::programPage(uint8_t *obuf) {
-  return cmdxfer(obuf, 20, NULL, 0);
+  cmdxfer(obuf, 20, NULL, 0);
+  waitBusy(); // a 200us delay is also acceptable, should not be needed with I2C
+  return 0;
 }
 
 uint32_t MachXO::programDone() {
