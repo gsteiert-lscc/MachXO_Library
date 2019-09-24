@@ -113,7 +113,7 @@ void setup()
   // Init file system on the flash
   fatfs.begin(&flash);
 
-  Wire.begin();
+  machXO.begin();
 
   Serial.begin(115200);
   while ( !Serial ) delay(10);   // wait for native usb
@@ -243,11 +243,22 @@ void xoLoadHEX(char *filename) {
   } else {
     Serial.print("Opened ");
     Serial.println(filename);
+    Serial.println("Entering Offline Configuration");
+    machXO.enableConfigOffline();
+    Serial.println("Erasing Configuration and UFM");
+    machXO.erase(MACHXO_ERASE_CONFIG_FLASH | MACHXO_ERASE_UFM);
+    Serial.println("Waiting for erase to complete");
+    machXO.waitBusy();
+    Serial.print("Loading ");
+    Serial.println(filename);
     machXO.loadHex(file);
     file.close();
+    Serial.println("Programming DONE status bit");
+    machXO.programDone(); 
+    Serial.println("Refreshing image");
+    machXO.refresh();
     Serial.print("Loaded ");    
     Serial.println(filename);   
-    machXO.programDone(); 
   }
 }
 
